@@ -84,6 +84,8 @@ namespace Leap
         /// <returns>toString of the serialized property's value</returns>
         public static string ValueToString(this SerializedProperty serializedProperty)
         {
+            if (serializedProperty == null) return "null";
+
             switch (serializedProperty.propertyType)
             {
                 case SerializedPropertyType.Integer:
@@ -93,13 +95,15 @@ namespace Leap
                 case SerializedPropertyType.Float:
                     return serializedProperty.floatValue.ToString();
                 case SerializedPropertyType.String:
-                    return serializedProperty.stringValue.ToString();
+                    return serializedProperty.stringValue ?? "null";
                 case SerializedPropertyType.Color:
                     return serializedProperty.colorValue.ToString();
                 case SerializedPropertyType.ObjectReference:
-                    return serializedProperty.objectReferenceValue.ToString();
+                    return serializedProperty.objectReferenceValue?.ToString() ?? "null";
                 case SerializedPropertyType.Enum:
-                    return serializedProperty.enumDisplayNames[serializedProperty.enumValueIndex];
+                    return serializedProperty.enumDisplayNames != null && serializedProperty.enumValueIndex >= 0 &&
+                           serializedProperty.enumValueIndex < serializedProperty.enumDisplayNames.Length ?
+                           serializedProperty.enumDisplayNames[serializedProperty.enumValueIndex] : "null";
                 case SerializedPropertyType.Vector2:
                     return serializedProperty.vector2Value.ToString();
                 case SerializedPropertyType.Vector3:
@@ -111,13 +115,13 @@ namespace Leap
                 case SerializedPropertyType.ArraySize:
                     return serializedProperty.arraySize.ToString();
                 case SerializedPropertyType.AnimationCurve:
-                    return serializedProperty.animationCurveValue.ToString();
+                    return serializedProperty.animationCurveValue?.ToString() ?? "null";
                 case SerializedPropertyType.Bounds:
                     return serializedProperty.boundsValue.ToString();
                 case SerializedPropertyType.Quaternion:
                     return serializedProperty.quaternionValue.ToString();
                 case SerializedPropertyType.ExposedReference:
-                    return serializedProperty.exposedReferenceValue.ToString();
+                    return serializedProperty.exposedReferenceValue?.ToString() ?? "null";
                 case SerializedPropertyType.FixedBufferSize:
                     return serializedProperty.fixedBufferSize.ToString();
                 case SerializedPropertyType.Vector2Int:
@@ -129,7 +133,7 @@ namespace Leap
                 case SerializedPropertyType.BoundsInt:
                     return serializedProperty.boundsIntValue.ToString();
                 case SerializedPropertyType.ManagedReference:
-                    return serializedProperty.managedReferenceValue.ToString();
+                    return serializedProperty.managedReferenceValue?.ToString() ?? "null";
                 case SerializedPropertyType.Hash128:
                     return serializedProperty.hash128Value.ToString();
                 case SerializedPropertyType.Generic:
